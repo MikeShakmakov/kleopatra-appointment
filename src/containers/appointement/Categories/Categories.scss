@@ -1,0 +1,71 @@
+@import "../../../assets/styles/variables";
+
+.card {
+  position: relative;
+  display: inline-block;
+  vertical-align: top;
+  padding: 0;
+  text-align: center;
+  padding: 1em;
+  border-radius: 0 2em 2em 2em;
+  transition: background 0.2s;
+
+  &:after {
+    content: '';
+    position: absolute;
+    display: block;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 0 2em 2em 2em;
+    // border: 1px solid transparent;
+    box-shadow: 1px 1px 2px $green; 
+    transition: box-shadow .3s ease-out;
+    // transition: border .5s ease-out;
+  }
+
+  &:hover:after {
+    box-shadow: 1px 1px 2px #fff;
+    // border-top-color: $green; 
+    // border-right-color: $green;
+    // border-bottom-color: $green;
+    // border-left-color: $green;
+
+    // transition:
+    //   border-top-color 0.15s linear, // Stagger border appearances
+    //   border-right-color 0.15s linear 0.10s,
+    //   border-bottom-color 0.15s linear 0.20s,
+    //   border-left-color 0.15s linear 0.30s;
+  }
+
+  &--active, &--active:hover {
+    background: $green;
+    color: #fff;
+
+    svg {
+      fill: #fff;
+    }
+    
+    &:after {
+      border: none;
+      box-shadow: none;
+    }
+  }
+
+  &__title {
+    font-size: 1.3em;
+  }
+
+  &__icon { 
+    padding: 1em 0;
+
+    > svg {
+      width: 3em; 
+    }
+  }
+
+  &__text {
+    margin: 0;
+  }
+}

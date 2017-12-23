@@ -1,0 +1,37 @@
+.services {
+  &__item {
+    margin-right: 1em;
+    margin-bottom: .5em;
+  }
+}
+
+.info {
+  &__item {
+    margin: .5em;
+  }
+
+  &__photo > img {
+    border-radius: 100%;
+    max-width: 150px;
+    height: auto;
+  }
+}
+
+.input-row {
+  margin: 1em 0;
+
+  &__label {
+    display: block;
+    padding-bottom: .3em;
+  }
+
+  &__textarea {
+    min-height: 10em;
+    width: 100%;
+    font-family: 'Roboto';
+  }
+
+  &__input {
+    width: 100%;
+  }
+}

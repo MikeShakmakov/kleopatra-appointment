@@ -1,0 +1,8 @@
+export const ADD_SERVICE = 'ADD_SERVICE'
+export const ADD_MASTER = 'ADD_MASTER'
+export const ADD_TIME = 'ADD_TIME'
+export const ADD_DATE = 'ADD_DATE'
+export const REMOVE_SERVICE = 'REMOVE_SERVICE'
+export const CHOOSE_CATEGORY = 'CHOOSE_CATEGORY'
+export const CLEAR_SERVICES = 'CLEAR_SERVICES'
+export const ADD_USER_DATA = 'ADD_USER_DATA'

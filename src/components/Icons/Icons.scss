@@ -1,0 +1,19 @@
+@import "../../assets/styles/variables";
+
+.str0 {stroke:$dark; stroke-width:0.0762}
+.fil3 {fill: $green}
+.fil5 {fill: $blue}
+.fil0 {fill: $dark}
+.fil1 {fill: $red}
+.fil4 {fill: $orange}
+.fil2 {fill: $yellow}
+.logo-svg {
+  shape-rendering:geometricPrecision;
+  text-rendering:geometricPrecision;
+  image-rendering:optimizeQuality;
+  fill-rule:evenodd;
+  clip-rule:evenodd;
+}
+.tick {
+  fill: #fff;
+}

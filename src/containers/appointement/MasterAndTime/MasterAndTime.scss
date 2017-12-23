@@ -1,0 +1,70 @@
+@import "../Categories/Categories.scss";
+
+.master-card {
+  @extend .card;
+  display: flex;
+  text-align: left;
+  border: none;
+  
+  &--active {
+    @extend .card--active;
+    // box-shadow: none;
+  }
+
+  &__photo {
+    > img {
+      width: 90%;
+      max-width: 150px;
+      border-radius: 100%;
+    }
+  }
+
+  &__text-row {
+    margin-top: .5em;
+
+    &:first-child {
+      margin-top: 0;
+      font-size: 1.2em;
+    }
+  }
+}
+
+.time-container {
+  text-align: center;
+  padding-left: 2em;
+  
+  &__time {
+    display: inline-block;
+    border-color: $gray;
+    border-style: solid;
+    border-width: 0 1px 1px 0;
+    border-radius: 0 1em 1em 1em;
+    padding: .2em .4em;
+    margin-bottom: .2em;
+    margin-right: .2em;
+    cursor: pointer;
+
+    &--disabled {
+      color: $gray;
+
+      &.time-container__time--active {
+        text-decoration: line-through;
+        color: $gray;
+        border-color: $gray;
+        animation: flash linear .5s infinite;
+      }
+    }
+
+    &--active {
+      color: $orange;
+      border-color: $orange;
+    }
+    
+    @keyframes flash {
+      0% { opacity: 1; } 
+      50% { opacity: .1; } 
+      100% { opacity: 1; }
+    }
+  }
+  
+}

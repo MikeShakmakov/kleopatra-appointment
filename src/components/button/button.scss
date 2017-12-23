@@ -1,0 +1,19 @@
+@import "../../assets/styles/variables";
+
+.button {
+  background-color: #fff;
+  cursor: pointer;
+  padding: .3em .5em;
+  background: $orange;
+  color: #fff;
+  border-radius: 1em; 
+
+  &:disabled {
+    background: #fff;
+    color: $gray;
+  }
+
+  &:focus {
+    border-color: $orange;
+  }
+}

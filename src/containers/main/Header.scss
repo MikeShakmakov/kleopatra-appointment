@@ -1,0 +1,26 @@
+$header-height: 90px;
+
+.header {
+  
+}
+
+.menu {
+  display: inline-block;
+
+  &__column {
+    line-height: $header-height;
+    display: inline-block;
+    vertical-align: top;
+    cursor: pointer;
+    text-decoration: none;
+    color: black;
+
+    + .menu__column {
+      padding-left: 2em;
+    }
+
+    &--logo {
+      line-height: 0;
+    }
+  }
+}
