@@ -4,8 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "main": "npm i && npm start",
-    "start": "webpack-dev-server --open",
+    "start": "npm install && webpack-dev-server --open",
     "test": "jest",
     "test:watch": "npm test -- --watch"
   },
