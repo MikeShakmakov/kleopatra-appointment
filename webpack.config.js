@@ -20,6 +20,7 @@ module.exports = {
   ],
   devServer: {
     historyApiFallback: true,
+    inline: true,
     port: process.env.PORT || 8080
   },
   output: {
