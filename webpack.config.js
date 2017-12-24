@@ -6,6 +6,8 @@ const babel = {
   spread: require('babel-plugin-transform-object-rest-spread')
 }
 
+console.log(process.env.PORT);
+
 module.exports = {
   entry: {
     app: './src/index.jsx'
