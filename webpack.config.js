@@ -19,7 +19,8 @@ module.exports = {
     })
   ],
   devServer: {
-    historyApiFallback: true
+    historyApiFallback: true,
+    port: process.env.port || 8080
   },
   output: {
     filename: '[name].bundle.js',
