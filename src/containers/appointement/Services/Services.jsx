@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import styles from './services.scss'
+import styles from './Services.scss'
 import {FlexContainer, Col} from '../../../components/layout/Flex-container'
 import {Icons} from '../../../components/Icons/Icons'
 
