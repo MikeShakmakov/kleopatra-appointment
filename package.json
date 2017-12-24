@@ -4,9 +4,11 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "webpack-dev-server",
+    "start:dev": "webpack-dev-server",
     "test": "jest",
-    "test:watch": "npm test -- --watch"
+    "test:watch": "npm test -- --watch",
+    "build": "webpack --config webpack.config.prod.js",
+    "start": "npm run build && node server.js"
   },
   "author": "",
   "license": "ISC",
