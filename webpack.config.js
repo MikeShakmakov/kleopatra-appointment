@@ -20,7 +20,7 @@ module.exports = {
   ],
   devServer: {
     historyApiFallback: true,
-    port: process.env.port || 8080
+    port: process.env.$PORT || 8080
   },
   output: {
     filename: '[name].bundle.js',
