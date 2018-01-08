@@ -1,7 +1,8 @@
 import queryString from 'query-string'
 
 const API_ROOT_LOCAL = 'http://localhost:3000'
-const API_ROOT = 'https://kleo-server.herokuapp.com'
+const API_ROOT_REMOTE = 'https://kleo-server.herokuapp.com'
+const API_ROOT = process.env.NODE_ENV === 'production' ? API_ROOT_REMOTE : API_ROOT_LOCAL;
 
 export function requestHandling(params, endpoint) {
   const slash = endpoint[0] === '/' || endpoint[0] === '/' ? '': '/'
