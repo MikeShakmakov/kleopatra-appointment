@@ -1,4 +1,4 @@
-export const ADD_SERVICE = 'ADD_SERVICE'
+export const ADD_SERVICES = 'ADD_SERVICES'
 export const ADD_MASTER = 'ADD_MASTER'
 export const ADD_TIME = 'ADD_TIME'
 export const ADD_DATE = 'ADD_DATE'

@@ -1,5 +1,5 @@
 import { combineReducers } from 'redux'
-import * as actionTypes from '../actions/apiActions'
+import { categoriesAPITypes, servicesAPITypes } from '../actions/apiActions'
 
 export function createApiReducer(name, apiTypes) {
   return function(state = {
@@ -25,14 +25,14 @@ export function createApiReducer(name, apiTypes) {
           isLoading: false,
           error: action.payload
         }
-      default: 
+      default:
         return state
     }
   }
 }
 
-export const categoriesReducer = createApiReducer('categories', actionTypes.categoriesAPITypes)
-export const servicesReducer = createApiReducer('services', actionTypes.servicesAPITypes)
+export const categoriesReducer = createApiReducer('categories', categoriesAPITypes)
+export const servicesReducer = createApiReducer('services', servicesAPITypes)
 
 export const apiReducer = combineReducers({
   categories: categoriesReducer,

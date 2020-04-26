@@ -15,7 +15,7 @@ export class Services extends React.PureComponent {
 
   onSearch(e) {
     this.setState({
-      searchValue: e.target.value      
+      searchValue: e.target.value
     })
   }
 
@@ -23,7 +23,7 @@ export class Services extends React.PureComponent {
     let selectedIndex = this.props.selectedServices.map(item => item.name).indexOf(service.name.toLowerCase())
 
     if (selectedIndex < 0) {
-      this.props.addServiceToStore(service)
+      this.props.addServicesToStore([service])
     } else {
       this.props.removeServiceFromStore(service.name.toLowerCase())
     }
@@ -41,35 +41,36 @@ export class Services extends React.PureComponent {
       <div>
         <input className={styles['search-input']} type="text" onChange={this.onSearch.bind(this)} />
 
-        {data && 
+        {data &&
           <FlexContainer className={styles['search-list']}>
-            {data.filter(item => item.name.toLowerCase().indexOf(searchValue) > -1).map((service, ind) => 
-              <Col md={3} xs={12} 
-                key={ind} 
-                className={styles['search-list__item'] + this.getServiceStateClass(service, data)} 
+            {data.filter(item => item.name.toLowerCase().indexOf(searchValue) > -1).map((service, ind) =>
+              <Col md={3} xs={12} sm={4} lg={2}
+                key={ind}
+                className={styles['search-list__item'] + this.getServiceStateClass(service, data)}
                 onClick={this.toggleService.bind(this, service)}>
                 <span>{service.name} </span>
-                <div>{service.time} мин.</div>
+                <div>{service.time}</div>
                 <div>{service.price} руб.</div>
-              </Col>) 
+              </Col>)
             }
           </FlexContainer>
-        } 
+        }
       </div>
     )
   }
 }
 Services.propTypes = {
-  data: PropTypes.arrayOf(PropTypes.shape({    
+  data: PropTypes.arrayOf(PropTypes.shape({
     name: PropTypes.string,
     price: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-    time: PropTypes.number
+    time: PropTypes.string
   })),
-  addServiceToStore: PropTypes.func,
+  addServicesToStore: PropTypes.func,
   removeServiceFromStore: PropTypes.func,
   selectedServices: PropTypes.arrayOf(PropTypes.shape({
+    _id: PropTypes.string,
     name: PropTypes.string,
     price: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-    time: PropTypes.number
+    time: PropTypes.string
   }))
 }

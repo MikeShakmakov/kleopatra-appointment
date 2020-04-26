@@ -2,7 +2,7 @@ import React from 'react'
 import {connect} from 'react-redux'
 import { withRouter } from 'react-router-dom'
 import queryString from 'query-string'
-import {categoriesAPIActions, servicesAPIActions} from '../../actions/apiActions'
+import {fetchEntities, fetchEntitiesTypes} from '../../actions/apiActions'
 import styles from './Appointment.scss'
 import {Stepper} from '../../components/stepper/Stepper'
 import {Services} from './Services/Services'
@@ -38,7 +38,7 @@ class AppointmentClass extends React.PureComponent {
         workload: ['07','08','09','10', '11', '12']
       },
     ]
-    
+
     this.stepperData = [
       {
         label: 'Тип услуги',
@@ -63,14 +63,11 @@ class AppointmentClass extends React.PureComponent {
     }
   }
 
-  addServicesToStore(servicesIds) {
-    const { kleoData } = this.props
-    const ids = servicesIds.split(',').map(item => parseInt(item))
-    let services = ids.map(id => kleoData.services.data.find(service => service.id === id ))
+  addServicesToStore(servicesIds, data) {
+    const ids = servicesIds.split(',')
+    let services = ids.map(id => data.find(service => service._id === id ))
 
-    services.forEach(service => {
-      this.props.addServiceToStore(service)
-    })
+    this.props.addServicesToStore(services)
   }
 
   addThirdStepDataToStore(masterId, date, time) {
@@ -82,45 +79,55 @@ class AppointmentClass extends React.PureComponent {
   }
 
   componentDidMount() {
-    const {pathname, search} = this.props.history.location
-    const parsedQuery = queryString.parse(search)
-    const {currentCategoryId, servicesIds, masterId, date, time} = parsedQuery
+    const {currentCategoryId, servicesIds, masterId, date, time} = this.getParsedQuery()
     let activeStep = 0
+    let fetchConfig = [this.getFetchDataConfig(activeStep)]
 
-    this.fetchData(0)
-
-    //todo: remake it to handle multiple requests using saga
     if(currentCategoryId) {
       activeStep = 1
       this.props.addCategoryToStore(currentCategoryId)
-      this.props.fetchServices({categoryId: currentCategoryId})
+      fetchConfig = [...fetchConfig, this.getFetchDataConfig(activeStep, {currentCategoryId})]
     }
     if(currentCategoryId && servicesIds) {
       activeStep = 2
-      setTimeout(() => {this.addServicesToStore(servicesIds)},100)
-      
+      // fetchConfig = [...fetchConfig, this.getFetchDataConfig(activeStep)]
     }
     if(currentCategoryId && servicesIds && date && time) {
       activeStep = 3
       this.addThirdStepDataToStore(masterId, date, time)
+      // fetchConfig = [...fetchConfig, this.getFetchDataConfig(activeStep)]
     }
+    this.props.fetchEntities(fetchConfig)
+
     this.setState({
       activeStep
     })
   }
 
+  componentWillReceiveProps(nextProps) {
+    if (!this.props.kleoData.services.data && nextProps.kleoData.services.data) {
+      const {servicesIds} = this.getParsedQuery()
+      this.addServicesToStore(servicesIds, nextProps.kleoData.services.data)
+    }
+  }
+
+  getParsedQuery() {
+    const {search} = this.props.history.location
+    return queryString.parse(search)
+  }
+
   updateQuery(activeStep) {
     const {replace} = this.props.history
-    const {pathname, search} = this.props.history.location
+    const {pathname} = this.props.history.location
     const {currentCategoryId, services, master, date, time} = this.props.appointment
-    let parsedQuery = queryString.parse(search)
+    let parsedQuery = this.getParsedQuery();
 
     switch(activeStep) {
-      case 1: 
+      case 1:
         parsedQuery['currentCategoryId'] = currentCategoryId
         break
       case 2:
-        parsedQuery['servicesIds'] = services.map(item => item.id).join(',')
+        parsedQuery['servicesIds'] = services.map(item => item._id).join(',')
         break
       case 3:
         parsedQuery['masterId'] = master && master.id !== undefined ? master.id : null
@@ -133,14 +140,14 @@ class AppointmentClass extends React.PureComponent {
 
   clearQuery(activeStep) {
     const {replace} = this.props.history
-    const {pathname, search} = this.props.history.location
-    let parsedQuery = queryString.parse(search)
+    const {pathname} = this.props.history.location
+    let parsedQuery = this.getParsedQuery()
 
     switch(activeStep) {
       case 0:
         delete parsedQuery['currentCategoryId']
         break
-      case 1: 
+      case 1:
         delete parsedQuery['servicesIds']
         break
       case 2:
@@ -152,19 +159,24 @@ class AppointmentClass extends React.PureComponent {
     replace(pathname + '?' + queryString.stringify(parsedQuery))
   }
 
-  fetchData(activeStep) {
+  getFetchDataConfig(activeStep, {currentCategoryId} = {}) {
     switch(activeStep) {
       case 0:
-        this.props.fetchCategories()
-        break
+        return {name: fetchEntitiesTypes.categories}
       case 1:
-        this.props.fetchServices({categoryId: this.props.appointment.currentCategoryId})
-        break
+        return {
+          name: fetchEntitiesTypes.services,
+          params: {
+            categoryId: currentCategoryId || this.props.appointment.currentCategoryId
+          }
+        }
+      default: return null
     }
   }
 
   onStepIncrease() {
     let activeStep = this.state.activeStep + 1
+    const fetchConfig = this.getFetchDataConfig(activeStep)
     if (activeStep < this.stepperData.length) {
       this.setState({
         activeStep
@@ -172,8 +184,10 @@ class AppointmentClass extends React.PureComponent {
     } else if (activeStep === this.stepperData.length && this.submitElem) {
       this.submitElem.click()
     }
+    if (fetchConfig) {
+      this.props.fetchEntities([this.getFetchDataConfig(activeStep)])
+    }
     this.updateQuery(activeStep)
-    this.fetchData(activeStep)
   }
 
   onStepDecrease() {
@@ -201,7 +215,7 @@ class AppointmentClass extends React.PureComponent {
     const {name, phone, comment} = data
     const {date, time, services, master} = this.props.appointment
     this.props.addUserDataToStore({name, phone, comment})
-    
+
     console.log({
       date,
       time,
@@ -216,7 +230,7 @@ class AppointmentClass extends React.PureComponent {
   render() {
     let {activeStep} = this.state
     let {
-      addServiceToStore,
+      addServicesToStore,
       removeServiceFromStore,
       addCategoryToStore,
       addMasterToStore,
@@ -239,35 +253,36 @@ class AppointmentClass extends React.PureComponent {
     // let isButtonDisabled = activeStep === 1 && !appointment.services.length || activeStep === 3 && this.state.lastStepButtonDisabled
     let isButtonDisabled = activeStep === 1 && !appointment.services.length
     let isBackButtonDisabled = activeStep === 0
+
     return(
       <div>
         <Stepper steps={this.stepperData} currentStep={activeStep} />
         <div className={styles['buttons']} align="right">
-          {stepperButtonBackText && 
-            <Button disabled={isBackButtonDisabled} 
+          {stepperButtonBackText &&
+            <Button disabled={isBackButtonDisabled}
             onClick={onStepDecrease.bind(this)}>{stepperButtonBackText}</Button>}
-          {stepperButtonText && 
+          {stepperButtonText &&
             <Button disabled={isButtonDisabled}
               onClick={onStepIncrease.bind(this)}>
                 {stepperButtonText}
             </Button>}
         </div>
-        {activeStep === 0 && 
+        {activeStep === 0 &&
           <Categories
-            data={kleoData.categories.data || []} 
+            data={kleoData.categories.data || []}
             addCategoryToStore={addCategoryToStore.bind(this)}
             currentCategoryId={appointment.currentCategoryId} />
         }
-        {activeStep === 1 && 
-          <Services 
-            data={kleoData.services.data || []} 
+        {activeStep === 1 &&
+          <Services
+            data={kleoData.services.data || []}
             selectedServices={appointment.services}
-            addServiceToStore={addServiceToStore.bind(this)} 
+            addServicesToStore={addServicesToStore.bind(this)}
             removeServiceFromStore={removeServiceFromStore.bind(this)} />
         }
         {activeStep === 2 &&
-          <MasterAndTime 
-            masters={mockMasters} 
+          <MasterAndTime
+            masters={mockMasters}
             selectedServices={appointment.services}
             addMasterToStore={addMasterToStore}
             addTimeToStore={addTimeToStore}
@@ -277,10 +292,10 @@ class AppointmentClass extends React.PureComponent {
             currentMasterId={appointment.master && appointment.master.id}/>
         }
         {activeStep === 3 &&
-          <Contacts 
+          <Contacts
             appointment={appointment}
             onLastStepFormChange={onLastStepFormChange.bind(this)}
-            getSubmitButtonElement={getSubmitButtonElement.bind(this)} 
+            getSubmitButtonElement={getSubmitButtonElement.bind(this)}
             handleSubmit={handleSubmit.bind(this)}/>
         }
       </div>
@@ -297,7 +312,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    addServiceToStore(service) {
+    addServicesToStore(service) {
       dispatch(addService(service))
     },
     removeServiceFromStore(name) {
@@ -321,11 +336,8 @@ const mapDispatchToProps = dispatch => {
     addUserDataToStore(data) {
       dispatch(addUserData(data))
     },
-    fetchCategories() {
-      dispatch(categoriesAPIActions.Load()) 
-    },
-    fetchServices(params) {
-      dispatch(servicesAPIActions.Load(params))
+    fetchEntities(entities) {
+      dispatch(fetchEntities(entities))
     }
   }
 }

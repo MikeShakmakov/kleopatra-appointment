@@ -10,17 +10,17 @@ const initialState = {
 }
 export function appointmentReducer(state = initialState, action) {
   switch (action.type) {
-    case actionTypes.ADD_SERVICE:
+    case actionTypes.ADD_SERVICES:
       return {
         ...state,
         services: [
           ...state.services,
-          {
-            id: action.service.id,
-            name: action.service.name.toLowerCase(),
-            price: action.service.price,
-            time: action.service.time
-          }
+          ...action.services.map(service => ({
+            _id: service._id,
+            name: service.name.toLowerCase(),
+            price: service.price,
+            time: service.time
+          }))
         ]
       }
     case actionTypes.REMOVE_SERVICE:
@@ -53,7 +53,7 @@ export function appointmentReducer(state = initialState, action) {
         ...state,
         date: action.date
       }
-    case actionTypes.ADD_DATE:
+    case actionTypes.ADD_USER_DATA:
       return {
         ...state,
         user: {

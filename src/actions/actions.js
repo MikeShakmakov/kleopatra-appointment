@@ -4,8 +4,8 @@ export function chooseCategory(id) {
   return {type: actionTypes.CHOOSE_CATEGORY, id}
 }
 
-export function addService(service) {
-  return { type: actionTypes.ADD_SERVICE, service }
+export function addService(services) {
+  return { type: actionTypes.ADD_SERVICES, services }
 }
 
 export function removeService(name) {

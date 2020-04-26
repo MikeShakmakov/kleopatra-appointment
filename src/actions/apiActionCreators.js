@@ -21,5 +21,5 @@ export function createAPIActions(types) {
 }
 
 export function createAction(type, payload) {
-  return payload ? { type, payload } : { type } 
+  return payload ? { type, payload } : { type }
 }

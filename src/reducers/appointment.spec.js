@@ -13,8 +13,8 @@ describe("appointment reducer", () => {
     })
   });
 
-  it("should handle ADD_SERVICE", () => {
+  it("should handle ADD_SERVICES", () => {
     const service = {id: 1, name: 'test', price: 10, time: {}}
-    expect(appointmentReducer({services: []}, {type: actionTypes.ADD_SERVICE, service})).toEqual({services: [service]})
+    expect(appointmentReducer({services: []}, {type: actionTypes.ADD_SERVICES, service})).toEqual({services: [service]})
   });
 });

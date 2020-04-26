@@ -1,6 +1,6 @@
 import queryString from 'query-string'
 
-const API_ROOT_LOCAL = 'http://localhost:3000'
+const API_ROOT_LOCAL = 'http://localhost:3000/api/v1'
 const API_ROOT_REMOTE = 'https://kleo-server.herokuapp.com'
 const API_ROOT = process.env.NODE_ENV === 'production' ? API_ROOT_REMOTE : API_ROOT_LOCAL;
 
