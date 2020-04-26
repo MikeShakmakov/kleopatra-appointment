@@ -6,6 +6,7 @@
   border-radius: 1em;
   border-left: 0;
   padding: .2em .5em;
+  font-size: inherit;
 
   &:focus {
     outline: none;
@@ -15,7 +16,7 @@
 
 .search-list {
   $border-width: 4px;
-  
+
   margin-top: 1em;
 
   &__item {
@@ -30,7 +31,7 @@
     &:hover, &--selected {
       border-color: $orange;
     }
-    
+
     &--selected {
       color: #fff;
       background-color: $orange;
